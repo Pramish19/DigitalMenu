@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>Admin Panel</h1>
+            <a href="login.html" class="logout-btn">Logout</a>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Dish Management Section -->
+            <section class="card">
+                <h2>Add New Dish</h2>
+                <form id="add-dish-form" class="form">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <input type="text" id="category" name="category" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Dish Name:</label>
+                        <input type="text" id="name" name="dishName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" name="description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price:</label>
+                        <input type="number" id="price" name="price" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn">Add Dish</button>
+                </form>
+            </section>
+
+            <!-- Menu List Section -->
+            <section class="card">
+                <h2>Menu List</h2>
+                <div id="menu-list" class="menu-list"></div>
+            </section>
+
+            <!-- Table Management Section -->
+            <section class="card">
+                <h2>Manage Tables</h2>
+                <div class="form-group">
+                    <input type="number" id="table-number" placeholder="Enter table number">
+                    <button onclick="addTable()" class="btn">Add Table</button>
+                </div>
+                <div id="admin-tables-container" class="tables-container"></div>
+            </section>
+
+            <!-- Order List Section -->
+            <section class="card">
+                <h2>Order Lists</h2>
+                <div id="order-list" class="order-list"></div>
+            </section>
+
+            
+        </main>
+    </div>
+
+    <!-- Link to Admin JavaScript -->
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
