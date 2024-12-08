@@ -11,6 +11,7 @@ document
 
     const dishData = { category, name, description, price };
 
+
     fetch("php/addDish.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -18,9 +19,10 @@ document
     })
       .then((response) => response.json())
       .then((data) => {
+
         if (data.success) {
           alert(data.message);
-          loadMenu(); // Reload the menu list
+          loadMenu(); // menu lsit lao reload gareko
         } else {
           alert(data.message);
         }
@@ -44,7 +46,7 @@ function loadMenu() {
 
         const dishDiv = document.createElement("div");
         dishDiv.innerHTML = `
-          <p>${dish.name} - $${price.toFixed(2)}</p>
+          <p><li><b>${dish.name}</li></b> <b>$${price.toFixed(2)}</b></p>
           <button onclick="deleteDish(${dish.id})">Delete</button>
         `;
         menuList.appendChild(dishDiv);
@@ -64,7 +66,7 @@ function deleteDish(dishId) {
       .then((data) => {
         if (data.success) {
           alert(data.message);
-          loadMenu(); // Reload the menu list
+          loadMenu(); // menu list lai reload gareko
         } else {
           alert(data.message);
         }
@@ -92,7 +94,7 @@ function addTable() {
       .then((data) => {
         if (data.success) {
           alert(data.message);
-          loadTableStatuses(); // Reload table statuses
+          loadTableStatuses(); // table status la reload gareko
         } else {
           alert(data.message);
         }
@@ -125,8 +127,7 @@ function addTable() {
       .then((response) => response.json())
       .then((tables) => {
         const tablesContainer = document.getElementById("admin-tables-container");
-        console.log("Fetched tables:", tables); // Debug: Verify fetched tables
-        tablesContainer.innerHTML = ""; // Clear the current list
+        tablesContainer.innerHTML = ""; // aailheko current list lai reload gareko
   
         tables.forEach((table) => {
           const tableDiv = document.createElement("div");
@@ -153,10 +154,9 @@ function addTable() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Update response:", data); // Debugging response
         if (data.success) {
           alert(data.message);
-          loadTables(); // Reload the updated table list
+          loadTables(); // updated table list lai reload gareko
         } else {
           console.error(data.message);
         }
@@ -170,46 +170,108 @@ function addTable() {
   
 
   // Order Management Section
-function loadOrders() {
+  function loadOrders() {
     const orderList = document.getElementById("order-list");
-  
+
     if (!orderList) {
-      console.error("Order list element not found!");
-      return;
+        console.error("Order list element not found!");
+        return;
     }
-  
+
     fetch("php/fetchOrders.php")
+        .then((response) => {
+            if (!response.ok) throw new Error("Failed to fetch orders");
+            return response.json();
+        })
+        .then((tables) => {
+            orderList.innerHTML = ""; // kunai pailako order x vane clear gareko
+
+            tables.forEach((table) => {
+                const orderDiv = document.createElement("div");
+
+                //per tabels anusar order display gareko
+                const orderItems = table.orders.map((orderArray) => {
+                    //orderArray chai arryy ho ki haina ra tesma kei items x ki xaina vanera check gareko
+                    return orderArray.map((item) => {
+                        if (item && item.id !== undefined && item.quantity !== undefined && item.name !== undefined) {
+                            return `<li> <b>Item ID:</b>  ${item.id} </li> <li> <b>Quantity:</b> ${item.quantity} </li> </li><b> Dish:</b>${item.name}</li>`;
+                        } else {
+                            return `<li>Invalid item data</li>`; // yedi invalid data x vane fall back garx back to loop
+                        }
+                    }).join(""); //order array ko sabbi items lai string ma join garx  
+                }).join(""); // table ko lagi sabbai orders join garx 
+
+                orderDiv.innerHTML = `
+                    <div class="order-header">
+                        <h3>Table ${table.table}</h3>
+                        <p class="order-count">Total Orders: ${table.orders.length}</p>
+                    </div>
+                    <ul class="order-details">
+                        ${orderItems}
+                    </ul>
+                    <div class="order-footer">
+                        <p><strong>Total Amount:</strong> $${table.total.toFixed(2)}</p>
+                        <button onclick="clearBill(${table.table})" class="btn">Clear Bill</button>
+                    </div>
+                    <hr class="order-divider">
+                `;
+                orderList.appendChild(orderDiv);
+            });
+        })
+        .catch((err) => console.error("Error loading orders:", err));
+}
+
+// function clearBill(tableNumber) {
+//   if (confirm(`Are you sure you want to clear the bill for Table ${tableNumber}?`)) {
+//       fetch("php/clearBill.php", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({ table_number: tableNumber }),
+//       })
+//           .then((response) => response.json())
+//           .then((data) => {
+//               if (data.success) {
+//                   alert(`Bill for Table ${tableNumber} has been cleared.`);
+//                   loadOrders(); // Refresh the orders list
+//               } else {
+//                   alert(`Error clearing bill: ${data.message}`);
+//               }
+//           })
+//           .catch((err) => console.error(`Error clearing bill for Table ${tableNumber}:`, err));
+//   }
+// }
+
+
+function clearBill(tableNumber) {
+  if (confirm(`Are you sure you want to clear the bill for Table ${tableNumber}?`)) {
+    fetch("php/clearBill.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ table_number: tableNumber }),
+    })
       .then((response) => response.json())
-      .then((tables) => {
-        orderList.innerHTML = ""; // Clear any existing orders
-  
-        tables.forEach((table) => {
-          const orderDiv = document.createElement("div");
-          orderDiv.innerHTML = `
-            <div class="order-header">
-            <h3>Table ${table.table}</h3>
-            <p class="order-count">Total Orders: ${table.orders.length}</p>
-        </div>
-        <ul class="order-details">
-            ${table.orders.flat().map((item) => `<li>${item}</li>`).join("")}
-        </ul>
-        <div class="order-footer">
-            <p><strong>Total Amount:</strong> $${table.total.toFixed(2)}</p>
-        </div>
-        <hr class="order-divider">
-          `;
-          orderList.appendChild(orderDiv);
-        });
+      .then((data) => {
+        if (data.success) {
+          alert(`Bill for Table ${tableNumber} has been cleared.`);
+
+          // Update the table status to 'available'
+          updateTableStatus(tableNumber, 'available');
+
+          loadOrders(); // Refresh the orders list
+        } else {
+          alert(`Error clearing bill: ${data.message}`);
+        }
       })
-      .catch((err) => console.error("Error loading orders:", err));
+      .catch((err) => console.error(`Error clearing bill for Table ${tableNumber}:`, err));
   }
+}
 
   
-  // Initialize functionalities on page load
+  // page load garda function initialize gareko
 document.addEventListener("DOMContentLoaded", () => {
-    loadMenu(); // Load the menu data
-    loadTableStatuses(); // Load table statuses
-    loadOrders(); // Load orders
-    loadTables();
+    loadMenu(); // menu data load garx
+    loadTableStatuses(); // table statuses lai load garx
+    loadOrders(); // orders load garx
+    loadTables(); //table load garx
   });
   

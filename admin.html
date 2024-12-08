@@ -24,8 +24,15 @@
                 <form id="add-dish-form" class="form">
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <input type="text" id="category" name="category" required>
-                    </div>
+                        <select name="category" id="category">
+                          <option value="Foods">Foods</option>
+                          <option value="Soft Drinks">Soft Drinks</option>
+                          <option value="Deserts">Deserts</option>
+                          <option value="Alcohol">Alcohol</option>
+                          <option value="Chef Special">Chef Special</option>
+                        </select>
+                        <input type="text" id="new-category" name="new-category" placeholder="Add a new category">
+                      </div>
                     <div class="form-group">
                         <label for="name">Dish Name:</label>
                         <input type="text" id="name" name="dishName" required>
