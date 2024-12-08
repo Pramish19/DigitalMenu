@@ -46,8 +46,9 @@ function loadMenu() {
 
         const dishDiv = document.createElement("div");
         dishDiv.innerHTML = `
-          <p><li><b>${dish.name}</li></b> <b>$${price.toFixed(2)}</b></p>
-          <button onclick="deleteDish(${dish.id})">Delete</button>
+        <li><div class="menu-card">
+         <p><h3>${dish.name}</h3><h4>$${price.toFixed(2)}</h4></p>
+          <button onclick="deleteDish(${dish.id})">Delete</button></div></li>
         `;
         menuList.appendChild(dishDiv);
       });
@@ -112,9 +113,11 @@ function addTable() {
         tables.forEach((table) => {
           const tableDiv = document.createElement("div");
           tableDiv.innerHTML = `
+          <div class="table-list">
             <p>Table ${table.table}: ${table.status}</p>
             <button onclick="updateTableStatus(${table.table}, 'available')">Mark as Available</button>
             <button onclick="updateTableStatus(${table.table}, 'occupied')">Mark as Occupied</button>
+            </div>
           `;
           tableManagement.appendChild(tableDiv);
         });
@@ -132,9 +135,11 @@ function addTable() {
         tables.forEach((table) => {
           const tableDiv = document.createElement("div");
           tableDiv.innerHTML = `
+          <div class="table-list">
             <p>Table ${table.table_number} - Status: ${table.status}</p>
             <button onclick="updateTableStatus(${table.table_number}, 'available')">Mark as Available</button>
             <button onclick="updateTableStatus(${table.table_number}, 'occupied')">Mark as Occupied</button>
+            </div>
           `;
           tablesContainer.appendChild(tableDiv);
         });
@@ -211,6 +216,7 @@ function addTable() {
                     </ul>
                     <div class="order-footer">
                         <p><strong>Total Amount:</strong> $${table.total.toFixed(2)}</p>
+                        <br>
                         <button onclick="clearBill(${table.table})" class="btn">Clear Bill</button>
                     </div>
                     <hr class="order-divider">

@@ -31,7 +31,7 @@
                           <option value="Alcohol">Alcohol</option>
                           <option value="Chef Special">Chef Special</option>
                         </select>
-                        <input type="text" id="new-category" name="new-category" placeholder="Add a new category">
+                        <!-- <input type="text" id="new-category" name="new-category" placeholder="Add a new category"> -->
                       </div>
                     <div class="form-group">
                         <label for="name">Dish Name:</label>
@@ -58,8 +58,8 @@
             <!-- Table Management Section -->
             <section class="card">
                 <h2>Manage Tables</h2>
-                <div class="form-group">
-                    <input type="number" id="table-number" placeholder="Enter table number">
+                <div class="form-group" >
+                    <input type="number" id="table-number" placeholder="Enter table number" required>
                     <button onclick="addTable()" class="btn">Add Table</button>
                 </div>
                 <div id="admin-tables-container" class="tables-container"></div>
