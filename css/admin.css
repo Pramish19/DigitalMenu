@@ -86,6 +86,13 @@ header h1 {
     border-radius: 5px;
 }
 
+
+.form-group #category {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 /* Buttons */
 .btn {
     background: #007bff;

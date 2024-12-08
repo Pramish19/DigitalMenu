@@ -1,12 +1,25 @@
 <?php
-// Load the orders from the JSON file
+include "db.php";
+
+// json file bata order load garx
 $ordersFile = 'orders.json';
 if (file_exists($ordersFile)) {
-    $orders = json_decode(file_get_contents($ordersFile), true);
+    $fileContents = file_get_contents($ordersFile);
+    $orders = json_decode($fileContents, true);
 
-    // Aggregate totals by table
+    if (!$orders) {
+        echo json_encode(['error' => 'Failed to decode orders.json']);
+        exit;
+    }
+
+    // table aggregrate gareko
     $aggregatedOrders = [];
     foreach ($orders as $order) {
+        // order structure validate gareko
+        if (!isset($order['table'], $order['order'], $order['total'])) {
+            continue; //invalid entries skip gareko
+        }
+
         $table = $order['table'];
         if (!isset($aggregatedOrders[$table])) {
             $aggregatedOrders[$table] = [
@@ -19,9 +32,10 @@ if (file_exists($ordersFile)) {
         $aggregatedOrders[$table]['total'] += $order['total'];
     }
 
-    // Reindex array for JSON encoding
+    //json encoding gareko for array reindex
     echo json_encode(array_values($aggregatedOrders));
 } else {
+    error_log("Orders file not found: $ordersFile");
     echo json_encode([]);
 }
 ?>

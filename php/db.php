@@ -1,5 +1,5 @@
 <?php
-$host = 'localhost:3308';
+$host = 'localhost:3307';
 $user = 'root';
 $password = '';
 $dbname = 'hotel_menu';

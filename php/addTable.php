@@ -2,7 +2,7 @@
 include 'db.php';
 
 
-// Get input data
+// input data ligeko 
 $data = json_decode(file_get_contents('php://input'), true);
 $tableNumber = $data['table'];
 
